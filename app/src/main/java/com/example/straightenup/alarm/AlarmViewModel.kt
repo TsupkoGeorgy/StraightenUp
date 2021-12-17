@@ -10,51 +10,67 @@ import java.time.LocalTime
 import java.util.*
 import kotlin.time.Duration.Companion.hours
 
-class AlarmViewModel : ViewModel() {
+class AlarmViewModel : ViewModel()
+{
 
     private lateinit var alarmManager: AlarmManager
 
     private lateinit var calendar: Calendar
+
     private val _selectedTime = MutableLiveData<String>()
     val selectedTime: LiveData<String>
         get() = _selectedTime
 
+    private val _currentTime = MutableLiveData<Long>()
+    val currentTime: LiveData<Long>
+        get() = _currentTime
+
+    private val _eventSetAlarm = MutableLiveData<Boolean>()
+    val eventSetAlarm: LiveData<Boolean>
+        get() = _eventSetAlarm
+
+    private val _eventCancelAlarm = MutableLiveData<Boolean>()
+    val eventCanceledAlarm: LiveData<Boolean>
+        get() = _eventCancelAlarm
+
+    private val _eventShowTimePicker = MutableLiveData<Boolean>()
+    val eventShowTimePicker: LiveData<Boolean>
+        get() = _eventShowTimePicker
 
 
     init
     {
-        _selectedTime.value = "08:15 PM"
+        _eventShowTimePicker.value = false
+        _eventSetAlarm.value = false
+        _eventCancelAlarm.value = false
 
-
-
+        setTime()
     }
 
-    private fun setTime(){
-        var currentTime : Long = Calendar.getInstance().timeInMillis
-
-        var outputFmt = SimpleDateFormat("HH:mm ")
-        var dateAsString = outputFmt.format(currentTime)
-
+    private fun setTime()
+    {
+        _currentTime.value = Calendar.getInstance().timeInMillis + 900000L
+        var outputFmt = SimpleDateFormat("HH:mm")
+        var dateAsString = outputFmt.format(currentTime.value)
 
         _selectedTime.value = dateAsString
 
     }
 
-    fun setAlarm(){
-        setTime()
-        alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-        val intent = Intent(this, AlarmReceiver::class.java)
+    fun setAlarm()
+    {
 
-        pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
-
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            AlarmManager.INTERVAL_FIFTEEN_MINUTES,
-            pendingIntent
-        )
-
-        Toast.makeText(this, "Alarm set Successfully", Toast.LENGTH_SHORT).show()
-
+        _eventSetAlarm.value = true
     }
+
+    fun cancelAlarm()
+    {
+        _eventCancelAlarm.value = true
+    }
+
+    fun showTimePicker()
+    {
+        _eventShowTimePicker.value = true
+    }
+
 }
