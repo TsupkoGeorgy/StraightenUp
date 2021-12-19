@@ -15,9 +15,9 @@ class AlarmReceiver: BroadcastReceiver() {
         val pendingIntent = PendingIntent.getActivity(context, 0, i ,0)
 
         val builder = NotificationCompat.Builder(context!!, "channelID")
-            .setSmallIcon(R.drawable.ic_launcher_background)
-            .setContentTitle("My notification")
-            .setContentText("Straighten Up")
+            .setSmallIcon(R.drawable.ic_stat_name)
+            .setContentTitle("Straighten Up")
+            .setContentText("Выпрямись")
             .setAutoCancel(true)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setPriority(NotificationCompat.PRIORITY_HIGH)

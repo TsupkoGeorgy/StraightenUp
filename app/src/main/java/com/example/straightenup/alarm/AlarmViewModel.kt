@@ -17,7 +17,10 @@ class AlarmViewModel : ViewModel()
 
     private lateinit var calendar: Calendar
 
-    private val _selectedTime = MutableLiveData<String>()
+
+    //Костыль, из фрагмента нельзя образаться к viewmodel
+    //
+    val _selectedTime = MutableLiveData<String>()
     val selectedTime: LiveData<String>
         get() = _selectedTime
 
@@ -40,10 +43,6 @@ class AlarmViewModel : ViewModel()
 
     init
     {
-        _eventShowTimePicker.value = false
-        _eventSetAlarm.value = false
-        _eventCancelAlarm.value = false
-
         setTime()
     }
 
@@ -52,25 +51,36 @@ class AlarmViewModel : ViewModel()
         _currentTime.value = Calendar.getInstance().timeInMillis + 900000L
         var outputFmt = SimpleDateFormat("HH:mm")
         var dateAsString = outputFmt.format(currentTime.value)
-
         _selectedTime.value = dateAsString
-
     }
 
-    fun setAlarm()
+    fun eventSetAlarm()
     {
-
         _eventSetAlarm.value = true
     }
 
-    fun cancelAlarm()
+    fun eventSetAlarmCompleted()
+    {
+        _eventSetAlarm.value = false
+    }
+
+    fun eventCancelAlarm()
     {
         _eventCancelAlarm.value = true
     }
 
-    fun showTimePicker()
+    fun eventCancelAlarmCompleted()
+    {
+        _eventCancelAlarm.value = false
+    }
+
+    fun eventShowTimePicker()
     {
         _eventShowTimePicker.value = true
     }
 
+    fun eventShowTimePickerCompleted()
+    {
+        _eventShowTimePicker.value = false
+    }
 }

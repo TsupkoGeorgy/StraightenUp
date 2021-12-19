@@ -24,13 +24,13 @@ import java.util.*
 import androidx.lifecycle.LiveData
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import java.sql.Time
 import java.text.SimpleDateFormat
 
 
-class AlarmFragment : Fragment()
-{
-    companion object
-    {
+class AlarmFragment : Fragment() {
+
+    companion object {
         const val NOTIFICATION_ID = 101
         const val CHANNEL_ID = "channelID"
         const val channel_name = "my_channel";
@@ -47,8 +47,7 @@ class AlarmFragment : Fragment()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View?
-    {
+    ): View? {
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_alarm,
@@ -64,88 +63,71 @@ class AlarmFragment : Fragment()
 
 
         alarmViewModel.eventSetAlarm.observe(viewLifecycleOwner, Observer {
-            if (it)
-            {
+            if (it) {
                 setAlarm(alarmViewModel.currentTime)
+                alarmViewModel.eventSetAlarmCompleted()
             }
         })
 
         alarmViewModel.eventCanceledAlarm.observe(viewLifecycleOwner, Observer {
-            if (it)
-            {
+            if (it) {
                 cancelAlarm()
+                alarmViewModel.eventCancelAlarmCompleted()
             }
         })
 
         alarmViewModel.eventShowTimePicker.observe(viewLifecycleOwner, Observer {
-            if (it)
-            {
+            if (it) {
                 showTimePicker()
-
+                alarmViewModel.eventShowTimePickerCompleted()
             }
         })
 
         return binding.root
     }
 
-    private fun setAlarm(timeInMillis: LiveData<Long>)
-    {
+    private fun setAlarm(timeInMillis: LiveData<Long>) {
+        var time = timeInMillis.value!!.toLong()
+        if (this::calendar.isInitialized) {
+            time = calendar.timeInMillis
+        }
         val intent = Intent(context, AlarmReceiver::class.java)
         alarmManager = activity?.getSystemService(ALARM_SERVICE) as AlarmManager
         pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
 
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
-            timeInMillis.value!!.toLong(),
+            time,
             AlarmManager.INTERVAL_HALF_HOUR,
             pendingIntent
         )
 
-        var outputFmt = SimpleDateFormat("HH:mm")
-        var dateAsString = outputFmt.format(timeInMillis.value!!.toLong())
-
-
-
-
-        Toast.makeText(context, "Alarm set  $dateAsString", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Alarm set  ${formatTimeToString(time)}", Toast.LENGTH_SHORT).show()
     }
 
-    private fun createNotificationChannel()
-    {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-        {
-            // Create the NotificationChannel
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = channel_name
             val descriptionText = description
             val importance = NotificationManager.IMPORTANCE_HIGH
             val mChannel = NotificationChannel(CHANNEL_ID, name, importance)
             mChannel.description = descriptionText
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
+
             val notificationManager =
-                    activity?.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+                activity?.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(mChannel)
-
-
         }
     }
 
-    private fun cancelAlarm()
-    {
+    private fun cancelAlarm() {
         alarmManager = activity?.getSystemService(ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, AlarmReceiver::class.java)
-
         pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
-
         alarmManager.cancel(pendingIntent)
-
         Toast.makeText(context, "Alarm Cancelled", Toast.LENGTH_SHORT).show()
     }
 
-    fun showTimePicker()
-    {
+    private fun showTimePicker() {
         picker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_24H)
             .setHour(12)
@@ -156,29 +138,24 @@ class AlarmFragment : Fragment()
         picker.show(childFragmentManager, "reded")
 
         picker.addOnPositiveButtonClickListener {
-            if (picker.hour > 12)
-            {
-                binding.selectedTime.text =
-                        String.format("%02d", picker.hour - 12) + " : " + String.format(
-                            "%02d",
-                            picker.minute
-                        ) + "PM"
-            } else
-            {
-                String.format("%02d", picker.hour) + " : " + String.format(
-                    "%02d",
-                    picker.minute
-                ) + "AM"
-            }
-
             calendar = Calendar.getInstance()
             calendar[Calendar.HOUR_OF_DAY] = picker.hour
             calendar[Calendar.MINUTE] = picker.minute
             calendar[Calendar.SECOND] = 0
             calendar[Calendar.MILLISECOND] = 0
+
+
+
+            alarmViewModel._selectedTime.value = formatTimeToString(calendar.timeInMillis)
         }
 
 
+    }
+
+    private fun formatTimeToString(time: Long): String? {
+        var outputFmt = SimpleDateFormat("HH:mm")
+        var dateAsString = outputFmt.format(time)
+        return dateAsString
     }
 
 
