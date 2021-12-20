@@ -17,56 +17,76 @@
 
 
         <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/roboto"
+            android:text="Time for reminder"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="48sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/selectedTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
+            android:fontFamily="@font/roboto"
             android:text="@{alarmViewModel.selectedTime}"
-            android:textSize="46dp"
+            android:textColor="@android:color/black"
+            android:textSize="48sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <Button
             android:id="@+id/selectTimeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="24dp"
             android:onClick="@{() -> alarmViewModel.eventShowTimePicker()}"
-            android:text="SelectTime"
+            android:outlineProvider="paddedBounds"
+            android:text="Select Time"
+            app:cornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cancelAlarmButton" />
+            app:layout_constraintTop_toBottomOf="@+id/selectedTime" />
 
         <Button
             android:id="@+id/setAlarmButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
             android:onClick="@{() -> alarmViewModel.eventSetAlarm() }"
             android:text="Set alarm"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:cornerRadius="10dp"
+            app:layout_constraintEnd_toStartOf="@+id/cancelAlarmButton"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/selectedTime" />
+            app:layout_constraintTop_toBottomOf="@+id/selectTimeButton" />
 
         <Button
             android:id="@+id/cancelAlarmButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
             android:onClick="@{() -> alarmViewModel.eventCancelAlarm()}"
             android:text="Cancel Alarm"
+            app:cornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/setAlarmButton" />
+            app:layout_constraintStart_toEndOf="@+id/setAlarmButton"
+            app:layout_constraintTop_toBottomOf="@+id/selectTimeButton" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

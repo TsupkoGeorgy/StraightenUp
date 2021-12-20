@@ -24,7 +24,6 @@ import java.util.*
 import androidx.lifecycle.LiveData
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import java.sql.Time
 import java.text.SimpleDateFormat
 
 
@@ -102,6 +101,9 @@ class AlarmFragment : Fragment() {
             pendingIntent
         )
 
+
+
+
         Toast.makeText(context, "Alarm set  ${formatTimeToString(time)}", Toast.LENGTH_SHORT).show()
     }
 
@@ -144,8 +146,6 @@ class AlarmFragment : Fragment() {
             calendar[Calendar.SECOND] = 0
             calendar[Calendar.MILLISECOND] = 0
 
-
-
             alarmViewModel._selectedTime.value = formatTimeToString(calendar.timeInMillis)
         }
 
@@ -154,8 +154,7 @@ class AlarmFragment : Fragment() {
 
     private fun formatTimeToString(time: Long): String? {
         var outputFmt = SimpleDateFormat("HH:mm")
-        var dateAsString = outputFmt.format(time)
-        return dateAsString
+        return outputFmt.format(time)
     }
 
 
