@@ -18,7 +18,7 @@ class AlarmViewModel : ViewModel()
     private lateinit var calendar: Calendar
 
 
-    //Костыль, из фрагмента нельзя образаться к viewmodel
+    //Костыль, из фрагмента нельзя обращаться к viewmodel
     //
     val _selectedTime = MutableLiveData<String>()
     val selectedTime: LiveData<String>
