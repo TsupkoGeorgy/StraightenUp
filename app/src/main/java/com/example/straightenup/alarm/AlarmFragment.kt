@@ -24,7 +24,6 @@ import java.util.*
 import androidx.lifecycle.LiveData
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import java.sql.Time
 import java.text.SimpleDateFormat
 
 
@@ -144,19 +143,13 @@ class AlarmFragment : Fragment() {
             calendar[Calendar.SECOND] = 0
             calendar[Calendar.MILLISECOND] = 0
 
-
-
             alarmViewModel._selectedTime.value = formatTimeToString(calendar.timeInMillis)
         }
 
 
     }
 
-    private fun formatTimeToString(time: Long): String? {
-        var outputFmt = SimpleDateFormat("HH:mm")
-        var dateAsString = outputFmt.format(time)
-        return dateAsString
-    }
+    private fun formatTimeToString(time: Long): String = SimpleDateFormat("HH:mm").format(time)
 
 
 }

@@ -18,55 +18,102 @@
 
         <TextView
             android:id="@+id/selectedTime"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/rounded_corner"
+            android:drawableStart="@drawable/ic_clock"
+            android:drawablePadding="-20dp"
+            android:drawableTint="#8C000000"
+            android:drawableTintMode="src_in"
+            android:fontFamily="@font/roboto_medium"
+            android:layerType="hardware"
+            android:layoutDirection="locale"
+            android:outlineProvider="none"
             android:text="@{alarmViewModel.selectedTime}"
+            android:textAlignment="center"
+            android:textColor="#8C000000"
             android:textSize="46dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <Button
             android:id="@+id/selectTimeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
-            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/roboto_medium"
             android:onClick="@{() -> alarmViewModel.eventShowTimePicker()}"
-            android:text="SelectTime"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cancelAlarmButton" />
-
-        <Button
-            android:id="@+id/setAlarmButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            android:onClick="@{() -> alarmViewModel.eventSetAlarm() }"
-            android:text="Set alarm"
+            android:text="Select Time"
+            app:cornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/selectedTime" />
 
         <Button
+            android:id="@+id/setAlarmButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/roboto_medium"
+            android:onClick="@{() -> alarmViewModel.eventSetAlarm() }"
+            android:text="Set alarm"
+            android:textSize="13sp"
+            app:cornerRadius="20dp"
+            app:layout_constraintEnd_toStartOf="@+id/cancelAlarmButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/selectTimeButton" />
+
+        <Button
             android:id="@+id/cancelAlarmButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/roboto_medium"
+            android:onClick="@{() -> alarmViewModel.eventCancelAlarm()}"
+            android:text="Cancel Alarm"
+            android:textSize="13sp"
+            app:cornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/setAlarmButton"
+            app:layout_constraintTop_toBottomOf="@+id/selectTimeButton" />
+
+        <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
-            android:onClick="@{() -> alarmViewModel.eventCancelAlarm()}"
-            android:text="Cancel Alarm"
+            android:fontFamily="@font/roboto_medium"
+            android:text="Selected time for alarm "
+            android:textAlignment="center"
+            android:textSize="48sp"
+            app:autoSizeTextType="none"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/setAlarmButton" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+
+            android:layout_marginBottom="16dp"
+            app:barrierDirection="top"
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            app:layout_constraintTop_toBottomOf="@id/selectedTime"
+            tools:layout_editor_absoluteX="171dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
